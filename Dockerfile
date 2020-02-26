@@ -1,10 +1,10 @@
-FROM docker.int.avast.com/postgres:9.6.17
+FROM docker.int.avast.com/postgres:10.10
 
 RUN \
     echo "deb http://apt.postgresql.org/pub/repos/apt stretch-pgdg main" > /etc/apt/sources.list.d/pgdg.list &&\
 	apt-get update                               &&\
     apt-cache search postgres-* &&\
-	apt-get install -y postgresql-9.6-hll            &&\
+	apt-get install -y postgresql-10-hll            &&\
 	apt-get clean all                            &&\
 	rm -rfv /var/lib/apt/lists/*
 
