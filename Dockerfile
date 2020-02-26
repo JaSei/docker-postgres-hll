@@ -1,4 +1,4 @@
-FROM docker.int.avast.com/postgres:9.5.19
+FROM docker.int.avast.com/postgres:9.5.20
 
 RUN \
     echo "deb http://apt.postgresql.org/pub/repos/apt stretch-pgdg main" > /etc/apt/sources.list.d/pgdg.list &&\
