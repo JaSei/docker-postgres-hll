@@ -1,4 +1,4 @@
-FROM postgres:10.11
+FROM postgres:10.12
 
 RUN \
     echo "deb http://apt.postgresql.org/pub/repos/apt stretch-pgdg main" > /etc/apt/sources.list.d/pgdg.list &&\
