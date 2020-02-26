@@ -1,10 +1,10 @@
-FROM docker.int.avast.com/postgres:11.7
+FROM docker.int.avast.com/postgres:12.1
 
 RUN \
     echo "deb http://apt.postgresql.org/pub/repos/apt stretch-pgdg main" > /etc/apt/sources.list.d/pgdg.list &&\
 	apt-get update                               &&\
     apt-cache search postgres-* &&\
-	apt-get install -y postgresql-11-hll            &&\
+	apt-get install -y postgresql-12-hll            &&\
 	apt-get clean all                            &&\
 	rm -rfv /var/lib/apt/lists/*
 
