@@ -13,11 +13,12 @@ do
 
     major=$(echo ${pg_ver} | sed -E "s/([0-9\.]+)\.[0-9]+$/\1/")
 
-    sed -i -E 's/(docker.int.avast.com\/postgres):[0-9\.]+/\1:'"$pg_ver"'/' Dockerfile
+    sed -i -E 's/(FROM postgres):[0-9\.]+/\1:'"$pg_ver"'/' Dockerfile
     sed -i -E 's/(postgresql-)[0-9\.]+(-hll)/\1'"$major"'\2/' Dockerfile
 
-    docker build -t avastsoftware/postgres-hll:${pg_ver} .
-    test_cmd="docker run --rm -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -d avastsoftware/postgres-hll:${pg_ver}"
+    name="jasei/postgres-hll:${pg_ver}"
+    docker build -t $name .
+    test_cmd="docker run --rm -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -d jasei/postgres-hll:${pg_ver}"
     instance=$($test_cmd)
     echo "TESTING of $instance ($test_cmd)"
     sleep 5;
@@ -27,6 +28,7 @@ do
         git add Dockerfile
         git commit -m "${pg_ver}"
         git tag ${pg_ver}
+        docker push $name
     else
       echo Something wrong!
       exit 1
