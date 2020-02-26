@@ -6,18 +6,30 @@ for pg_ver in "${PG_VERS[@]}";
 do
     echo ---BUILD ${pg_ver}---
 
-    sed -i "s/<<PG_VERSION>>/${pg_ver}/" Dockerfile
+    if git rev-parse $pg_ver >/dev/null 2>&1
+    then
+        continue
+    fi
 
-    docker build -t avastsoftware/postgres-hll:${pg_ver} --build-arg ${pg_ver} .
-    instance=$(docker run --rm -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -d avastsoftware/postgres-hll:${pg_ver})
+    major=$(echo ${pg_ver} | sed -E "s/([0-9\.]+)\.[0-9]+$/\1/")
+
+    sed -i -E 's/(docker.int.avast.com\/postgres):[0-9\.]+/\1:'"$pg_ver"'/' Dockerfile
+    sed -i -E 's/(postgresql-)[0-9\.]+(-hll)/\1'"$major"'\2/' Dockerfile
+
+    docker build -t avastsoftware/postgres-hll:${pg_ver} .
+    test_cmd="docker run --rm -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -d avastsoftware/postgres-hll:${pg_ver}"
+    instance=$($test_cmd)
+    echo "TESTING of $instance ($test_cmd)"
     sleep 5;
     
-    if docker logs ${instance} | grep "CREATE EXTENSION"; then
+    if docker logs ${instance} | grep "CREATE EXTENSION"
+    then
         git add Dockerfile
         git commit -m "${pg_ver}"
         git tag ${pg_ver}
     else
       echo Something wrong!
+      exit 1
     fi
 
     docker stop ${instance}
