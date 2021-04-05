@@ -1,10 +1,10 @@
-FROM postgres:12.2
+FROM postgres:13.2
 
 RUN \
     echo "deb http://apt.postgresql.org/pub/repos/apt stretch-pgdg main" > /etc/apt/sources.list.d/pgdg.list &&\
 	apt-get update                               &&\
     apt-cache search postgres-* &&\
-	apt-get install -y postgresql-12-hll            &&\
+	apt-get install -y postgresql-13-hll            &&\
 	apt-get clean all                            &&\
 	rm -rfv /var/lib/apt/lists/*
 
