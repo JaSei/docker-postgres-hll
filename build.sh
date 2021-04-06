@@ -29,6 +29,7 @@ do
         git commit -m "${pg_ver}"
         git tag ${pg_ver}
         docker push $name
+        git push origin "${pg_ver}"
     else
       echo Something wrong!
       exit 1
