@@ -1,10 +1,13 @@
-FROM postgres:13.2
+FROM postgres:12.19-bookworm
 
 RUN \
-    echo "deb http://apt.postgresql.org/pub/repos/apt stretch-pgdg main" > /etc/apt/sources.list.d/pgdg.list &&\
 	apt-get update                               &&\
+    apt-get install -y wget gnupg2 &&\
+    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - &&\
+    echo "deb http://apt.postgresql.org/pub/repos/apt bookworm-pgdg main" > /etc/apt/sources.list.d/pgdg.list &&\
+    apt-get update &&\
     apt-cache search postgres-* &&\
-	apt-get install -y postgresql-13-hll            &&\
+	apt-get install -y postgresql-12-hll            &&\
 	apt-get clean all                            &&\
 	rm -rfv /var/lib/apt/lists/*
 
