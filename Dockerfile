@@ -1,4 +1,4 @@
-FROM postgres:15.7-bookworm
+FROM postgres:16.3-bookworm
 
 RUN \
 	apt-get update                               &&\
@@ -7,7 +7,7 @@ RUN \
     echo "deb http://apt.postgresql.org/pub/repos/apt bookworm-pgdg main" > /etc/apt/sources.list.d/pgdg.list &&\
     apt-get update &&\
     apt-cache search postgres-* &&\
-	apt-get install -y postgresql-15-hll            &&\
+	apt-get install -y postgresql-16-hll            &&\
 	apt-get clean all                            &&\
 	rm -rfv /var/lib/apt/lists/*
 
